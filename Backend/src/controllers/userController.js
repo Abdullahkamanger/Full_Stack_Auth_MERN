@@ -23,7 +23,7 @@ export const registerUser = async (req, res) => {
     await user.save();
     res.status(201).json({
       message: "User registered successfully",
-      user: { name: user.name, email: user.email },
+      user: { id: user._id, name: user.name, email: user.email, createdAt: user.createdAt },
     });
   } catch (err) {
     // Handle Mongoose Validation Errors specifically
@@ -74,7 +74,7 @@ export const loginUser = async (req, res) => {
       .cookie("token", token, options)
       .json({
         message: "Login successful",
-        user: { name: user.name, email: user.email },
+        user: { id: user._id, name: user.name, email: user.email, createdAt: user.createdAt },
         token,
       });
   } catch (error) {
@@ -93,6 +93,7 @@ export const getUserProfile = async (req, res) => {
         id: _id,
         name,
         email,
+        createdAt: req.user.createdAt,
       },
     });
   } catch (error) {
@@ -128,8 +129,10 @@ export const updateUser = async (req, res) => {
       success: true,
       message: "Profile updated successfully",
       user: {
+        id: user._id,
         name: user.name,
         email: user.email,
+        createdAt: user.createdAt,
       },
     });
   } catch (err) {

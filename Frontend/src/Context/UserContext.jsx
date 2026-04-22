@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const { data } = await api.get("/auth/user/"); 
+        const { data } = await api.get("/user/"); 
         if (data.success) {
           setUser(data.user);
           setIsAuthenticated(true);
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const { data } = await api.post("/auth/login", { email, password });
+      const { data } = await api.post("/login", { email, password });
       setUser(data.user);
       setIsAuthenticated(true);
       toast.success("Welcome back!");
@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await api.get("/auth/logout");
+      await api.get("/logout");
       setUser(null);
       setIsAuthenticated(false);
       toast.success("Logged out successfully");
@@ -61,7 +61,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     setLoading(true);
     try {
-      const { data } = await api.post("/auth/register", userData);
+      const { data } = await api.post("/register", userData);
       toast.success(data.message || "Registration successful!");
       return { success: true };
     } catch (error) {

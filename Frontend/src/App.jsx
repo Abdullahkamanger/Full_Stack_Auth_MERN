@@ -6,8 +6,8 @@ import ProtectedRoute from "./Components/ProtectedRoute.jsx";
 // Pages
 import LoginPage from "./Pages/LogIn.jsx";
 import SignupPage from "./Pages/SignUp.jsx";
-// import ProfilePage from "./Pages/ProfilePage";
-// import UpdateProfilePage from "./Pages/UpdateProfilePage";
+import ProfilePage from "./Pages/Profile.jsx";
+import UpdateProfilePage from "./Pages/UpdateProfile.jsx";
 
 function App() {
   return (
@@ -21,12 +21,12 @@ function App() {
           {/* Protected Routes */}
           <Route path="/profile" element={
             <ProtectedRoute>
-              {/* <ProfilePage /> */}
+              <ProfilePage />
             </ProtectedRoute>
           } />
           <Route path="/update-profile" element={
             <ProtectedRoute>
-              {/* <UpdateProfilePage /> */}
+              <UpdateProfilePage />
             </ProtectedRoute>
           } />
 
