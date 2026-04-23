@@ -39,7 +39,7 @@ function App() {
           } />
         </Routes>
       <Routes>
-          <Route path = "/" element={<Navigate to="/login" />} />
+          <Route path = "/" element={<Navigate to="/profile" />} />
       </Routes>
       </AnimatePresence>
     </AuthProvider>
