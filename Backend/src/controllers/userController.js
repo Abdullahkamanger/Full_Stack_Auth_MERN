@@ -59,14 +59,15 @@ export const loginUser = async (req, res) => {
 
     const token = await user.genToken();
 
+    const isProduction = process.env.NODE_ENV?.toLowerCase() === "production";
     const options = {
       // Ensure process.env.COOKIE_EXPIRATION is converted to a number
       expires: new Date(
         Date.now() + (Number(process.env.COOKIE_EXPIRATION) || 86400000),
       ),
       httpOnly: true,
-      secure: process.env.NODE_ENV?.toLowerCase() === "production",
-      sameSite: "strict",
+      secure: isProduction,
+      sameSite: isProduction ? "none" : "strict",
     };
 
     res
@@ -148,14 +149,15 @@ export const updateUser = async (req, res) => {
 
 export const logoutUser = (req, res) => {
   try {
+    const isProduction = process.env.NODE_ENV?.toLowerCase() === "production";
     // We overwrite the 'token' cookie with null and set it to expire now
     res
       .status(200)
       .cookie("token", null, {
         expires: new Date(Date.now()), // Expires immediately
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        secure: isProduction,
+        sameSite: isProduction ? "none" : "strict",
       })
       .json({
         success: true,
