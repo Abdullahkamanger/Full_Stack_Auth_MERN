@@ -17,9 +17,7 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem("authToken");
         
         if (token) {
-          // Set authorization header with the token
-          api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          
+          // Token exists, verify it by calling the /user/ endpoint
           const { data } = await api.get("/user/"); 
           if (data.success) {
             setUser(data.user);
@@ -30,9 +28,11 @@ export const AuthProvider = ({ children }) => {
           setUser(null);
         }
       } catch (error) {
-        // If it fails, the user is just not logged in (Unauthorized)
-        localStorage.removeItem("authToken");
-        delete api.defaults.headers.common["Authorization"];
+        // Only clear token if it's an unauthorized error (401)
+        if (error.response?.status === 401) {
+          localStorage.removeItem("authToken");
+          delete api.defaults.headers.common["Authorization"];
+        }
         setIsAuthenticated(false);
         setUser(null);
       } finally {
@@ -51,7 +51,6 @@ export const AuthProvider = ({ children }) => {
       // Store token in localStorage
       if (data.token) {
         localStorage.setItem("authToken", data.token);
-        api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
       }
       
       setUser(data.user);
@@ -73,7 +72,6 @@ export const AuthProvider = ({ children }) => {
       
       // Clear token from localStorage
       localStorage.removeItem("authToken");
-      delete api.defaults.headers.common["Authorization"];
       
       setUser(null);
       setIsAuthenticated(false);

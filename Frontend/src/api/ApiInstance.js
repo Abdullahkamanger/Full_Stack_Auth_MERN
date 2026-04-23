@@ -4,7 +4,6 @@ import axios from "axios";
 // 1. Create the Axios Instance
 const api = axios.create({
   baseURL: `${import.meta.env.VITE_BACKEND_URL}/api/auth`,
-   withCredentials: true,
 });
 
 // 2. Add a request interceptor to include the token from localStorage
