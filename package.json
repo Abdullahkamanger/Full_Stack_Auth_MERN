@@ -3,14 +3,11 @@
   "version": "1.0.0",
   "description": "Backend APi Documentation::",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cd Backend && npm run dev",
-    "start": "cd Backend && node app.js",
+    "server": "cd Backend && nodemon app.js",
     "client": "cd Frontend && npm run dev",
-    "server": "cd Backend && npm run dev",
     "dev:all": "concurrently \"npm run server\" \"npm run client\"",
-    "build": "cd Frontend && npm run build"
-    
+    "build": "cd Frontend && npm run build",
+    "install:all": "cd Backend && npm install && cd ../Frontend && npm install"
   },
   "repository": {
     "type": "git",
@@ -24,4 +21,5 @@
     "url": "https://github.com/Abdullahkamanger/Full_Stack_Auth_MERN/issues"
   },
   "homepage": "https://github.com/Abdullahkamanger/Full_Stack_Auth_MERN#readme"
+
 }
