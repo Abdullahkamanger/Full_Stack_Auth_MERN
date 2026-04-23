@@ -7,20 +7,34 @@ import { useAuth } from "../Context/UserContext.jsx";
 import Input from "../Components/Input.jsx";
 import Button from "../Components/Button.jsx";
 import Layout from "../Components/Layout.jsx";
+import AnimatedPage from "../Components/AnimatePage.jsx";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { login, loading } = useAuth();
+  const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
     const result = await login(email, password);
-    if (result.success) navigate("/profile");
+
+if (!result.success) {
+      setIsError(true);
+      // Optional: Reset shake after it plays so it can play again on next error
+      setTimeout(() => setIsError(false), 500);
+    }
+     if (result.success) navigate("/profile");
+
   };
+    
+
 
   return (
-    <Layout>
+    <AnimatedPage isError={isError}>
+
+
+<Layout>
        <div className="text-center mb-8">
         <motion.h2 
           initial={{ scale: 0.9 }}
@@ -44,6 +58,10 @@ const LoginPage = () => {
         </Link>
       </div>
     </Layout>
+
+
+    </AnimatedPage>
+      
   );
 };
 

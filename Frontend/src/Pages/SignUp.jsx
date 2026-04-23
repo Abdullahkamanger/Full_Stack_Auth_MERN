@@ -7,20 +7,28 @@ import { useAuth } from "../Context/UserContext.jsx";
 import Input from "../Components/Input.jsx";
 import Button from "../Components/Button.jsx";
 import Layout from "../Components/Layout.jsx";
+import AnimatedPage from "../Components/AnimatePage.jsx";
 
 const SignupPage = () => {
   const [formData, setFormData] = useState({ name: "", email: "", password: "", confirmPassword: "" });
   const { register, loading } = useAuth();
+  const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const result = await register(formData);
+    if (!result.success) {
+      setIsError(true);
+      // Optional: Reset shake after it plays so it can play again on next error
+      setTimeout(() => setIsError(false), 500);
+    }
     if (result.success) navigate("/login");
   };
 
   return (
-    <Layout>
+   <AnimatedPage isError={isError}>
+ <Layout>
       <div className="text-center mb-8">
         <motion.h2 
           initial={{ opacity: 0, y: -20 }}
@@ -66,6 +74,10 @@ const SignupPage = () => {
         </p>
       </div>
     </Layout>
+
+
+
+   </AnimatedPage>
   );
 };
 

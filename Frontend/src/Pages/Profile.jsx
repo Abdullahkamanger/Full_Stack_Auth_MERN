@@ -4,9 +4,12 @@ import { useAuth } from "../Context/UserContext.jsx";
 import { User, Mail, Calendar, Edit, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 import Layout from "../Components/Layout.jsx";
+import AnimatedPage from "../Components/AnimatePage.jsx";
+import { useState } from "react";
 
 const ProfilePage = () => {
     const { user, logout } = useAuth();
+    const [isError, setIsError] = useState(false);
 
     // Animation variants for staggered list items
     const container = {
@@ -22,8 +25,17 @@ const ProfilePage = () => {
         show: { opacity: 1, x: 0 }
     };
 
+    const handleLogout = async () => {
+        const result = await logout();
+        if (!result.success) {
+            setIsError(true);
+            setTimeout(() => setIsError(false), 500);
+        }
+    };
+
     return (
-        <Layout>
+        <AnimatedPage isError={isError}>
+            <Layout>
             <div className="text-center mb-6">
                 <motion.div
                     initial={{ scale: 0 }}
@@ -64,7 +76,7 @@ const ProfilePage = () => {
                     </motion.button>
                 </Link>
                 <motion.button
-                    onClick={logout}
+                    onClick={handleLogout}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="px-4 py-3 bg-red-500 bg-opacity-20 hover:bg-opacity-30 text-red-500 rounded-lg border border-red-500 flex items-center justify-center"
@@ -73,6 +85,7 @@ const ProfilePage = () => {
                 </motion.button>
             </div>
         </Layout>
+        </AnimatedPage>
     );
 };
 
