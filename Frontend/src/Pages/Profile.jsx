@@ -1,7 +1,7 @@
 //eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { useAuth } from "../Context/UserContext.jsx";
-import { User, Mail, Calendar, Edit, LogOut } from "lucide-react";
+import { User, Mail, Calendar, Edit, LogOut, LogOutIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import Layout from "../Components/Layout.jsx";
 import AnimatedPage from "../Components/AnimatePage.jsx";
@@ -79,9 +79,9 @@ const ProfilePage = () => {
                     onClick={handleLogout}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-4 py-3 bg-red-500 bg-opacity-20 hover:bg-opacity-30 text-red-500 rounded-lg border border-red-500 flex items-center justify-center"
+                    className="px-4 py-3 bg-red-500 bg-opacity-20 hover:bg-opacity-30 rounded-lg border border-red-500 flex items-center justify-center"
                 >
-                    <LogOut size={18} />
+                    <LogOutIcon size={20} />
                 </motion.button>
             </div>
         </Layout>
