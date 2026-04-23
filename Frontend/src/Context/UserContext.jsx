@@ -9,17 +9,30 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true)
+  
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const { data } = await api.get("/user/"); 
-        if (data.success) {
-          setUser(data.user);
-          setIsAuthenticated(true);
+        // Check if token exists in localStorage
+        const token = localStorage.getItem("authToken");
+        
+        if (token) {
+          // Set authorization header with the token
+          api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+          
+          const { data } = await api.get("/user/"); 
+          if (data.success) {
+            setUser(data.user);
+            setIsAuthenticated(true);
+          }
+        } else {
+          setIsAuthenticated(false);
+          setUser(null);
         }
       } catch (error) {
         // If it fails, the user is just not logged in (Unauthorized)
-        toast.error(`Please log in to continue ${error.response?.data?.message || ""}`);
+        localStorage.removeItem("authToken");
+        delete api.defaults.headers.common["Authorization"];
         setIsAuthenticated(false);
         setUser(null);
       } finally {
@@ -34,6 +47,13 @@ export const AuthProvider = ({ children }) => {
     setLoading(true);
     try {
       const { data } = await api.post("/login", { email, password });
+      
+      // Store token in localStorage
+      if (data.token) {
+        localStorage.setItem("authToken", data.token);
+        api.defaults.headers.common["Authorization"] = `Bearer ${data.token}`;
+      }
+      
       setUser(data.user);
       setIsAuthenticated(true);
       toast.success("Welcome back!");
@@ -50,6 +70,11 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       await api.post("/logout");
+      
+      // Clear token from localStorage
+      localStorage.removeItem("authToken");
+      delete api.defaults.headers.common["Authorization"];
+      
       setUser(null);
       setIsAuthenticated(false);
       toast.success("Logged out successfully");
