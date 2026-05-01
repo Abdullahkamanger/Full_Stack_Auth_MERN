@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
         
         if (token) {
           // Token exists, verify it by calling the /user/ endpoint
-          const { data } = await api.get("/user/"); 
+          const { data } = await api.get("/auth/user"); 
           if (data.success) {
             setUser(data.user);
             setIsAuthenticated(true);
@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const { data } = await api.post("/login", { email, password });
+      const { data } = await api.post("/auth/login", { email, password });
       
       // Store token in localStorage
       if (data.token) {
@@ -68,25 +68,23 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await api.post("/logout");
-      
-      // Clear token from localStorage
+      await api.post("/auth/logout");
+      toast.success("Logged out successfully");
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      // Always clear token and state
       localStorage.removeItem("authToken");
-      
       setUser(null);
       setIsAuthenticated(false);
-      toast.success("Logged out successfully");
       return { success: true };
-    } catch (error) {
-      toast.error(`Logout failed ${error.response?.data?.message || ""}`);
-      return { success: false };
     }
   };
 
   const register = async (userData) => {
     setLoading(true);
     try {
-      const { data } = await api.post("/register", userData);
+      const { data } = await api.post("/auth/register", userData);
       toast.success(data.message || "Registration successful!");
       return { success: true };
     } catch (error) {
