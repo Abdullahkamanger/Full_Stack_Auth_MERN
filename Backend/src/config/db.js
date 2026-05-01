@@ -2,6 +2,10 @@ import mongoose from 'mongoose';
 
 
 const connectDB = async ()=>{
+
+    if (mongoose.connections[0].readyState) {
+    return; // Already connected
+  }
 if(process.env.DB_URI){
     try{
         await mongoose.connect(process.env.DB_URI)
